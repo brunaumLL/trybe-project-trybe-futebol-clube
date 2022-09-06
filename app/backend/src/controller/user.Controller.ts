@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import TokenMiddleware from '../middleware/tokenMiddleware';
 import UserService from '../service/user.Service';
 
 export default class UserController {
@@ -7,7 +8,7 @@ export default class UserController {
     if (!email || !password) return res.status(400).json({ message: 'All fields must be filled' });
     const user = await UserService.getByEmail(email);
     if (!user) return res.status(401).json({ message: 'Incorrect email or password' });
-    const token = await UserService.makeToken(user);
+    const token = await TokenMiddleware.makeToken(user);
     return res.status(200).json({ token });
   }
 }

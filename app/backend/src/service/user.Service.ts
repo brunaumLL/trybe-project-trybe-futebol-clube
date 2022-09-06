@@ -1,7 +1,4 @@
-import { sign } from 'jsonwebtoken';
 import Users from '../database/models/user.Model';
-
-const secret = process.env.JWT_SECRET || 'secret';
 
 export default class UserService {
   static async getByEmail(email: string) {
@@ -11,11 +8,5 @@ export default class UserService {
     });
 
     return user;
-  }
-
-  static async makeToken(user: Users) {
-    const { password, ...tokenPayload } = user;
-    const token = sign({ data: tokenPayload }, secret);
-    return token;
   }
 }
