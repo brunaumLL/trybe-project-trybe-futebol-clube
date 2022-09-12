@@ -17,4 +17,15 @@ export default class MatchesService {
     });
     return matches;
   }
+
+  static async progressMatche(
+    homeTeam: string,
+    awayTeam: string,
+    homeTeamGoals: string,
+    awayTeamGoals: string,
+  ) {
+    const matche = await Matches.create({
+      homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress: true });
+    return matche;
+  }
 }
