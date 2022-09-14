@@ -5,5 +5,6 @@ const matchesRouter = Router();
 
 matchesRouter.get('/', MatchesController.getAll);
 matchesRouter.post('/', MatchesController.progressMatche);
+matchesRouter.patch('/:id/finish', MatchesController.finishMatche);
 
 export default matchesRouter;

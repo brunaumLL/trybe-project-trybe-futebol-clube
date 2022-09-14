@@ -18,6 +18,10 @@ export default class MatchesService {
     return matches;
   }
 
+  static async finishMatche(id: number) {
+    await Matches.update({ inProgress: false }, { where: { id } });
+  }
+
   static async progressMatche(
     homeTeam: string,
     awayTeam: string,
@@ -27,5 +31,23 @@ export default class MatchesService {
     const matche = await Matches.create({
       homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress: true });
     return matche;
+  }
+
+  static async existTeam(homeTeam: string, awayTeam: string) {
+    if (homeTeam === awayTeam) {
+      return { status: 401, message: 'It is not possible to create a match with two equal teams' };
+    }
+
+    const home = await Teams.findOne({
+      where: { id: homeTeam },
+    });
+
+    const away = await Teams.findOne({
+      where: { id: awayTeam },
+    });
+
+    if (!home || !away) return { status: 404, message: 'There is no team with such id!' };
+
+    return { homeTeam, awayTeam };
   }
 }
