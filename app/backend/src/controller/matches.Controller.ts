@@ -36,4 +36,11 @@ export default class MatchesController {
     );
     return res.status(201).json(matches);
   }
+
+  static async editMatche(req: Request, res: Response) {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    await MatchesService.editMatche(Number(id), homeTeamGoals, awayTeamGoals);
+    return res.status(200).json({ message: 'Updated' });
+  }
 }

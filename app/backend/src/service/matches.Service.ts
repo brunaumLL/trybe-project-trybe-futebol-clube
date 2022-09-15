@@ -50,4 +50,8 @@ export default class MatchesService {
 
     return { homeTeam, awayTeam };
   }
+
+  static async editMatche(id: number, homeTeamGoals: number, awayTeamGoals: number) {
+    await Matches.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+  }
 }
