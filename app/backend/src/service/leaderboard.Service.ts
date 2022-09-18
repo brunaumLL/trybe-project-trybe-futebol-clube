@@ -25,4 +25,26 @@ export default class LeaderboardService {
 
     return LeaderboardConfig.sortGamesResult(matches);
   }
+
+  static async getAllAwayGames(): Promise<ILeaderboard[]> {
+    const teams = await TeamsService.getAll();
+    const matches = await Promise.all(teams.map(async (team) => {
+      const awayMatches = await Matches
+        .findAll({ where: { awayTeam: team.id, inProgress: false } });
+      return {
+        name: team.teamName,
+        totalPoints: LeaderboardConfig.totalPointsWhenAway(awayMatches),
+        totalGames: awayMatches.length,
+        totalVictories: LeaderboardConfig.awayVictories(awayMatches),
+        totalDraws: LeaderboardConfig.draws(awayMatches),
+        totalLosses: LeaderboardConfig.homeVictories(awayMatches),
+        goalsFavor: LeaderboardConfig.goalsAway(awayMatches),
+        goalsOwn: LeaderboardConfig.goalsHome(awayMatches),
+        goalsBalance: LeaderboardConfig.balanceWhenAway(awayMatches),
+        efficiency: LeaderboardConfig.efficiencyWhenAway(awayMatches),
+      };
+    }));
+
+    return LeaderboardConfig.sortGamesResult(matches);
+  }
 }
